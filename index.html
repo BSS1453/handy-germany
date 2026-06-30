@@ -47,7 +47,7 @@
 
   /* ---------- HEADER ---------- */
   header{
-    position:sticky;top:0;z-index:9999; /* Erhöht, damit die Leaflet-Karte nicht überlappt */
+    position:sticky;top:0;z-index:9999;
     background:rgba(243,241,236,0.88);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
@@ -317,11 +317,11 @@
         <div class="section-num">02 — Kontakt</div>
         <h2 class="section-title">Komm vorbei</h2>
       </div>
-      <p class="section-desc">Wir sind am Stuttgarter Platz in Berlin, gut erreichbar mit der S-Bahn.</p>
+      <p class="section-desc">Wir sind an der Stuttgarter Straße in Berlin, gut erreichbar mit der S-Bahn.</p>
     </div>
     <div class="contact-grid">
       <div>
-        <div class="info-row"><span class="k">Adresse</span><span class="v">Stuttgarter Platz 1a, Berlin</span></div>
+        <div class="info-row"><span class="k">Adresse</span><span class="v">Stuttgarter Straße 1a, Berlin</span></div>
         <div class="info-row"><span class="k">Telefon</span><span class="v">030 — 77900184</span></div>
         <div class="info-row"><span class="k">Mo – Sa</span><span class="v">10:00 – 18:00 Uhr</span></div>
         <div class="info-row"><span class="k">Sonntag</span><span class="v">Geschlossen</span></div>
@@ -342,27 +342,26 @@
         <a href="#">Datenschutz</a>
       </div>
     </div>
-    <div class="foot-fine">© 2026 Handy Germany, Stuttgarter Platz 1a, Berlin.</div>
+    <div class="foot-fine">© 2026 Handy Germany, Stuttgarter Straße 1a, Berlin.</div>
   </div>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // Intersection Observer (Animationen)
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Initialisierung der OpenStreetMap Karte
-  const map = L.map('map').setView([52.5045, 13.3135], 16);
+  // Korrigierte Koordinaten für Stuttgarter Straße 1a, Berlin
+  const map = L.map('map').setView([52.5186, 13.3135], 16); 
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  L.marker([52.5045, 13.3135]).addTo(map)
-    .bindPopup('Handy Germany<br>Stuttgarter Platz 1a');
+  L.marker([52.5186, 13.3135]).addTo(map)
+    .bindPopup('Handy Germany<br>Stuttgarter Straße 1a');
 </script>
 
 </body>
