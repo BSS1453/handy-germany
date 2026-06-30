@@ -317,11 +317,11 @@
         <div class="section-num">02 — Kontakt</div>
         <h2 class="section-title">Komm vorbei</h2>
       </div>
-      <p class="section-desc">Wir sind an der Stuttgarter Straße in Berlin, gut erreichbar mit der S-Bahn.</p>
+      <p class="section-desc">Wir sind am Stuttgarter Platz in Berlin, gut erreichbar mit der S-Bahn.</p>
     </div>
     <div class="contact-grid">
       <div>
-        <div class="info-row"><span class="k">Adresse</span><span class="v">Stuttgarter Straße 1a, Berlin</span></div>
+        <div class="info-row"><span class="k">Adresse</span><span class="v">Stuttgarter Platz 1a, 10627 Berlin</span></div>
         <div class="info-row"><span class="k">Telefon</span><span class="v">030 — 77900184</span></div>
         <div class="info-row"><span class="k">Mo – Sa</span><span class="v">10:00 – 18:00 Uhr</span></div>
         <div class="info-row"><span class="k">Sonntag</span><span class="v">Geschlossen</span></div>
@@ -342,7 +342,7 @@
         <a href="#">Datenschutz</a>
       </div>
     </div>
-    <div class="foot-fine">© 2026 Handy Germany, Stuttgarter Straße 1a, Berlin.</div>
+    <div class="foot-fine">© 2026 Handy Germany, Stuttgarter Platz 1a, 10627 Berlin.</div>
   </div>
 </footer>
 
@@ -353,15 +353,15 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Korrigierte Koordinaten für Stuttgarter Straße 1a, Berlin
-  const map = L.map('map').setView([52.5186, 13.3135], 16); 
+  // Exakte Koordinaten für Handy Germany am Stuttgarter Platz 1a, Berlin
+  const map = L.map('map').setView([52.5058, 13.3061], 17); 
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  L.marker([52.5186, 13.3135]).addTo(map)
-    .bindPopup('Handy Germany<br>Stuttgarter Straße 1a');
+  L.marker([52.5058, 13.3061]).addTo(map)
+    .bindPopup('Handy Germany<br>Stuttgarter Platz 1a, 10627 Berlin');
 </script>
 
 </body>
