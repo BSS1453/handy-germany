@@ -164,17 +164,59 @@
   .section-desc{max-width:340px;font-size:14.5px;color:var(--steel);line-height:1.6;font-weight:500;}
 
   /* ---------- SERVICES ---------- */
-  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);}
-  .service-card{background:var(--paper);padding:38px 30px;transition:background .2s ease;}
+  /* Grid angepasst für 4 Elemente */
+  .services{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);}
+  .service-card{background:var(--paper);padding:38px 24px;transition:background .2s ease;}
   .service-card:hover{background:#e9e6dd;}
   .service-icon{width:42px;height:42px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
-  .service-card h3{font-size:19px;margin-bottom:12px;letter-spacing:-0.01em;}
+  .service-card h3{font-size:18px;margin-bottom:12px;letter-spacing:-0.01em;}
   .service-card p{font-size:14px;color:var(--steel);line-height:1.6;font-weight:500;margin-bottom:18px;}
   .service-link{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:6px;color:var(--signal-dim);}
   .service-link svg{transition:transform .2s ease;}
   .service-card:hover .service-link svg{transform:translateX(4px);}
 
-  @media (max-width:860px){.services{grid-template-columns:1fr;}}
+  @media (max-width:1024px){.services{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){.services{grid-template-columns:1fr;}}
+
+  /* ---------- VIDEO SECTION ---------- */
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    background: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .video-container iframe, 
+  .video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
+  }
+  .video-placeholder svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    color: var(--signal);
+  }
 
   /* ---------- TESTIMONIAL SLIDER ---------- */
   .testi {
@@ -187,7 +229,7 @@
     position: relative;
     max-width: 820px;
     margin: 0 auto;
-    min-height: 220px; /* Hält den Platz, damit nichts springt */
+    min-height: 220px;
   }
   .testi-slide {
     position: absolute;
@@ -196,18 +238,18 @@
     width: 100%;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(60px); /* Startet leicht rechts */
+    transform: translateX(60px);
     transition: opacity 0.7s ease, transform 0.7s ease, visibility 0.7s;
   }
   .testi-slide.active {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0); /* Fährt in die Mitte */
+    transform: translateX(0);
   }
   .testi-slide.exit {
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-60px); /* Slidet nach links weg */
+    transform: translateX(-60px);
   }
   .testi-quote {
     font-family: 'Archivo Expanded';
@@ -262,6 +304,7 @@
     <div class="logo"><span class="dot"></span>HANDY GERMANY</div>
     <nav class="navlinks">
       <a href="#leistungen">Leistungen</a>
+      <a href="#video">Einblick</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
     <a href="#kontakt" class="navcta">Kontakt</a>
@@ -274,7 +317,7 @@
     <div>
       <div class="eyebrow">Berlin</div>
       <h1 class="hero-title">Dein Handy.<br>Repariert<span class="o">.</span><br>Heute<span class="o">.</span></h1>
-      <p class="hero-sub">Reparatur und geprüfte Smartphones — ehrlich kalkuliert, in Berlin geprüft und meist noch am selben Tag erledigt.</p>
+      <p class="hero-sub">Reparatur, geprüfte Smartphones und Zubehör — ehrlich kalkuliert, in Berlin geprüft und meist noch am selben Tag erledigt.</p>
       <div class="hero-actions">
         <a href="#kontakt" class="btn-primary">
           So findest du uns
@@ -285,10 +328,10 @@
     </div>
     <div class="hero-panel">
       <div class="label">Werkstatt-Status</div>
-      <div class="stat-row"><span class="k">Display-Wechsel</span><span class="v signal">ab 30 Min.</span></div>
-      <div class="stat-row"><span class="k">Akku-Tausch</span><span class="v signal">ab 25 Min.</span></div>
+      <div class="stat-row"><span class="k">Display-Wechsel</span><span class="v signal">ab 1 Std.</span></div>
+      <div class="stat-row"><span class="k">Akku-Tausch</span><span class="v signal">ab 1 Std.</span></div>
+      <div class="stat-row"><span class="k">Folienwechsel</span><span class="v signal">Sofort</span></div>
       <div class="stat-row"><span class="k">Wartezeit</span><span class="v">Meist vor Ort</span></div>
-      <div class="stat-row"><span class="k">Kostenvoranschlag</span><span class="v">Kostenlos</span></div>
     </div>
   </div>
 </section>
@@ -297,12 +340,12 @@
   <div class="ticker-track">
     <span><span class="dot">●</span>Display-Reparatur ab 30 Minuten</span>
     <span><span class="dot">●</span>Akku-Tausch ab 25 Minuten</span>
+    <span><span class="dot">●</span>Panzerglas & Handyhüllen</span>
     <span><span class="dot">●</span>Geprüfte Refurbished-Geräte</span>
-    <span><span class="dot">●</span>Kostenloser Kostenvoranschlag</span>
     <span><span class="dot">●</span>Display-Reparatur ab 30 Minuten</span>
     <span><span class="dot">●</span>Akku-Tausch ab 25 Minuten</span>
+    <span><span class="dot">●</span>Panzerglas & Handyhüllen</span>
     <span><span class="dot">●</span>Geprüfte Refurbished-Geräte</span>
-    <span><span class="dot">●</span>Kostenloser Kostenvoranschlag</span>
   </div>
 </div>
 
@@ -313,7 +356,7 @@
         <div class="section-num">01 — Leistungen</div>
         <h2 class="section-title">Alles rund um dein Smartphone, an einem Ort</h2>
       </div>
-      <p class="section-desc">Reparatur und geprüfte Geräte aus einer Hand — wir kümmern uns um die Technik, du musst dir keine Gedanken machen.</p>
+      <p class="section-desc">Reparatur, geprüfte Geräte und schützendes Zubehör aus einer Hand — wir kümmern uns um die Technik, du musst dir keine Gedanken machen.</p>
     </div>
     <div class="services">
       <div class="service-card reveal">
@@ -340,7 +383,45 @@
         <p>Geprüfte Gebrauchtgeräte mit Garantie — die nachhaltige Alternative zum Neukauf.</p>
         <a href="#kontakt" class="service-link">Mehr erfahren <svg width="14" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2"/></svg></a>
       </div>
+      <!-- NEUE ZUBEHÖR KARTE -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Panzerglas & Hüllen</h3>
+        <p>Schütze dein Handy. Wir montieren dein neues Panzerglas blasenfrei und haben eine große Auswahl an Hüllen.</p>
+        <a href="#kontakt" class="service-link">Mehr erfahren <svg width="14" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2"/></svg></a>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- NEUE VIDEO SECTION -->
+<section class="section" id="video">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="section-num">02 — Einblick</div>
+        <h2 class="section-title">Ein Blick in unsere Werkstatt</h2>
+      </div>
+      <p class="section-desc">Präzision und Sorgfalt bei jedem Handgriff. Überzeuge dich selbst, wie wir dein Smartphone wieder in Form bringen.</p>
+    </div>
+    
+    <div class="video-container reveal">
+      <!-- HIER KANNST DU DEIN VIDEO EINFÜGEN (z.B. ein YouTube iframe oder ein <video> Tag) -->
+      <div class="video-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+        <span>Platzhalter für dein Werkstatt-Video</span>
+      </div>
+      
+      <!-- BEISPIEL FÜR EIN LOKALES VIDEO:
+      <video src="dein-video.mp4" controls poster="dein-vorschaubild.jpg"></video>
+      -->
+      <!-- BEISPIEL FÜR YOUTUBE:
+      <iframe src="https://www.youtube.com/embed/DEINE_VIDEO_ID" title="Werkstatt Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      -->
+    </div>
+
   </div>
 </section>
 
@@ -374,11 +455,12 @@
 
   </div>
 </section>
+
 <section class="section" id="kontakt">
   <div class="wrap">
     <div class="section-head">
       <div>
-        <div class="section-num">02 — Kontakt</div>
+        <div class="section-num">03 — Kontakt</div>
         <h2 class="section-title">Komm vorbei</h2>
       </div>
       <p class="section-desc">Wir sind am Stuttgarter Platz in Berlin, gut erreichbar mit der S-Bahn.</p>
@@ -401,6 +483,7 @@
       <div class="logo"><span class="dot"></span>HANDY GERMANY</div>
       <div class="foot-links">
         <a href="#leistungen">Leistungen</a>
+        <a href="#video">Einblick</a>
         <a href="#kontakt">Kontakt</a>
         <a href="#">Impressum</a>
         <a href="#">Datenschutz</a>
@@ -423,26 +506,20 @@
   let currentSlide = 0;
 
   function nextSlide() {
-    // Aktuellen Slide nach links rausschieben
     const outgoing = slides[currentSlide];
     outgoing.classList.remove('active');
     outgoing.classList.add('exit');
 
-    // Nächsten Slide berechnen
     currentSlide = (currentSlide + 1) % slides.length;
     const incoming = slides[currentSlide];
     
-    // Sicherstellen, dass der neue Slide von rechts kommt
     incoming.classList.remove('exit'); 
     
-    // Kleiner Timeout, damit der Browser das Zurücksetzen (remove exit) rendert,
-    // bevor die active-Klasse hinzugefügt wird.
     setTimeout(() => {
       incoming.classList.add('active');
     }, 50);
   }
 
-  // Alle 7 Sekunden (7000ms) wechseln
   setInterval(nextSlide, 7000);
 
   // Exakte Koordinaten für Handy Germany am Stuttgarter Platz 1a, Berlin
