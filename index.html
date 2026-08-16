@@ -1,537 +1,4664 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Handy Germany — Smartphones & Reparatur in Berlin</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=Archivo:wght@400;500;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f3f1ec">
 
-  :root{
-    --ink:#16181c;
-    --paper:#f3f1ec;
-    --steel:#3a3f47;
-    --signal:#ff5a1f;
-    --signal-dim:#e64e16;
-    --line: rgba(22,24,28,0.12);
-    --line-strong: rgba(22,24,28,0.22);
-  }
+    <title>Handy Germany — Smartphones & Reparatur in Berlin</title>
 
-  *{margin:0;padding:0;box-sizing:border-box;}
+    <meta
+        name="description"
+        content="Handy Germany in Berlin-Charlottenburg: Smartphone-Reparatur, Display, Akku, Zubehör und geprüfte Geräte."
+    >
 
-  html{scroll-behavior:smooth;}
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Archivo', sans-serif;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Expanded:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-  h1,h2,h3,.disp{
-    font-family:'Archivo Expanded', sans-serif;
-    font-weight:800;
-    letter-spacing:-0.01em;
-    text-transform:uppercase;
-  }
+    <!-- Leaflet Karte -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
 
-  a{color:inherit;text-decoration:none;}
+    <style>
 
-  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+        /* =========================================================
+           GRUNDFARBEN
+           ========================================================= */
 
-  @media (prefers-reduced-motion: reduce){
-    *{animation:none!important;transition:none!important;}
-  }
+        :root {
+            --ink: #16181c;
+            --paper: #f3f1ec;
+            --paper-2: #ebe8e0;
+            --paper-3: #dedad0;
 
-  /* ---------- HEADER ---------- */
-  header{
-    position:sticky;top:0;z-index:9999;
-    background:rgba(243,241,236,0.88);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
-  }
-  .nav{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:18px 32px;max-width:1180px;margin:0 auto;
-  }
-  .logo{
-    font-family:'Archivo Expanded';font-weight:800;font-size:20px;
-    letter-spacing:-0.02em;text-transform:uppercase;
-    display:flex;align-items:center;gap:8px;
-  }
-  .logo .dot{width:9px;height:9px;background:var(--signal);border-radius:1px;display:inline-block;}
-  .navlinks{display:flex;gap:36px;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;}
-  .navlinks a{position:relative;padding:4px 0;}
-  .navlinks a::after{
-    content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--signal);
-    transition:width .25s ease;
-  }
-  .navlinks a:hover::after{width:100%;}
-  .navcta{
-    border:1.5px solid var(--ink);padding:9px 18px;font-size:13px;font-weight:700;
-    text-transform:uppercase;letter-spacing:0.04em;transition:all .2s ease;
-  }
-  .navcta:hover{background:var(--ink);color:var(--paper);}
-  .navtoggle{display:none;}
+            --steel: #3a3f47;
+            --muted: #74777d;
 
-  @media (max-width:860px){
-    .navlinks{display:none;}
-  }
+            --signal: #ff5a1f;
+            --signal-dim: #e64e16;
+            --signal-light: #ff7a4a;
 
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;
-    padding:110px 0 90px;
-    border-bottom:1px solid var(--line);
-    overflow:hidden;
-  }
-  .hero-grid{
-    position:absolute;inset:0;
-    background-image:
-      linear-gradient(var(--line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size:64px 64px;
-    mask-image:radial-gradient(ellipse 80% 60% at 70% 30%, black 10%, transparent 75%);
-    opacity:0.7;
-  }
-  .hero-inner{position:relative;display:grid;grid-template-columns:1.15fr 0.85fr;gap:60px;align-items:end;}
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;
-    color:var(--signal-dim);margin-bottom:22px;
-  }
-  .eyebrow::before{content:'';width:7px;height:7px;background:var(--signal);border-radius:50%;
-    box-shadow:0 0 0 4px rgba(255,90,31,0.18);}
-  h1.hero-title{
-    font-size:clamp(40px, 6vw, 76px);
-    line-height:0.96;
-    margin-bottom:24px;
-  }
-  h1.hero-title .o{color:var(--signal);}
-  .hero-sub{
-    font-size:17px;line-height:1.6;color:var(--steel);max-width:480px;margin-bottom:34px;font-weight:500;
-  }
-  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
-  .btn-primary{
-    background:var(--ink);color:var(--paper);padding:15px 28px;font-size:14px;font-weight:700;
-    text-transform:uppercase;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:10px;
-    transition:all .2s ease;border:1.5px solid var(--ink);
-  }
-  .btn-primary:hover{background:var(--signal);border-color:var(--signal);transform:translateY(-2px);}
-  .btn-secondary{
-    padding:15px 28px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
-    border:1.5px solid var(--line-strong);transition:all .2s ease;
-  }
-  .btn-secondary:hover{border-color:var(--ink);}
+            --white: #ffffff;
 
-  .hero-panel{
-    border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);
-    padding:30px;position:relative;
-  }
-  .hero-panel::before{
-    content:'';position:absolute;top:-1.5px;left:24px;right:24px;height:1.5px;background:var(--signal);
-  }
-  .hero-panel .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#9a9da3;margin-bottom:18px;}
-  .stat-row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.12);}
-  .stat-row:last-of-type{border-bottom:none;}
-  .stat-row .k{font-size:13px;color:#b7bac0;font-weight:500;}
-  .stat-row .v{font-family:'Archivo Expanded';font-weight:700;font-size:15px;}
-  .stat-row .v.signal{color:var(--signal);}
+            --line: rgba(22, 24, 28, 0.12);
+            --line-strong: rgba(22, 24, 28, 0.22);
 
-  @media (max-width:860px){
-    .hero-inner{grid-template-columns:1fr;}
-    .nav{padding:16px 20px;}
-    .wrap{padding:0 20px;}
-  }
+            --shadow:
+                0 30px 80px rgba(22, 24, 28, 0.12);
 
-  /* ---------- TICKER ---------- */
-  .ticker{
-    background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap;
-    border-bottom:1px solid var(--line);
-  }
-  .ticker-track{display:inline-block;padding:13px 0;animation:scroll 28s linear infinite;}
-  .ticker-track span{display:inline-block;padding:0 30px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;}
-  .ticker-track span .dot{color:var(--signal);margin-right:30px;}
-  @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+            --radius: 24px;
+        }
 
-  /* ---------- SECTION TITLES ---------- */
-  .section{padding:96px 0;border-bottom:1px solid var(--line);}
-  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:54px;flex-wrap:wrap;}
-  .section-num{font-size:13px;font-weight:700;color:var(--signal-dim);letter-spacing:0.08em;margin-bottom:10px;}
-  h2.section-title{font-size:clamp(30px,4vw,46px);line-height:1.02;max-width:600px;}
-  .section-desc{max-width:340px;font-size:14.5px;color:var(--steel);line-height:1.6;font-weight:500;}
 
-  /* ---------- SERVICES ---------- */
-  /* Grid angepasst für 4 Elemente */
-  .services{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);}
-  .service-card{background:var(--paper);padding:38px 24px;transition:background .2s ease;}
-  .service-card:hover{background:#e9e6dd;}
-  .service-icon{width:42px;height:42px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
-  .service-card h3{font-size:18px;margin-bottom:12px;letter-spacing:-0.01em;}
-  .service-card p{font-size:14px;color:var(--steel);line-height:1.6;font-weight:500;margin-bottom:18px;}
-  .service-link{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;display:inline-flex;align-items:center;gap:6px;color:var(--signal-dim);}
-  .service-link svg{transition:transform .2s ease;}
-  .service-card:hover .service-link svg{transform:translateX(4px);}
+        /* =========================================================
+           RESET
+           ========================================================= */
 
-  @media (max-width:1024px){.services{grid-template-columns:repeat(2,1fr);}}
-  @media (max-width:640px){.services{grid-template-columns:1fr;}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* ---------- VIDEO SECTION ---------- */
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    height: 0;
-    overflow: hidden;
-    background: var(--ink);
-    border: 1.5px solid var(--ink);
-  }
-  .video-container iframe, 
-  .video-container video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .video-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--paper);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 14px;
-    text-align: center;
-    padding: 20px;
-  }
-  .video-placeholder svg {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 16px;
-    color: var(--signal);
-  }
 
-  /* ---------- TESTIMONIAL SLIDER ---------- */
-  .testi {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 90px 0;
-    overflow: hidden;
-  }
-  .testi-slider {
-    position: relative;
-    max-width: 820px;
-    margin: 0 auto;
-    min-height: 220px;
-  }
-  .testi-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(60px);
-    transition: opacity 0.7s ease, transform 0.7s ease, visibility 0.7s;
-  }
-  .testi-slide.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-  }
-  .testi-slide.exit {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-60px);
-  }
-  .testi-quote {
-    font-family: 'Archivo Expanded';
-    font-size: clamp(20px, 3vw, 32px);
-    font-weight: 700;
-    line-height: 1.35;
-    margin-bottom: 30px;
-    letter-spacing: -0.01em;
-  }
-  .testi-meta {
-    font-size: 14px;
-    color: #a7aab0;
-  }
-  .testi-meta strong {
-    display: block;
-    color: var(--paper);
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 5px;
-  }
+        html {
+            scroll-behavior: smooth;
+        }
 
-  /* ---------- CONTACT / MAP STRIP ---------- */
-  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;}
-  .info-row{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line);}
-  .info-row .k{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;color:var(--steel);}
-  .info-row .v{font-size:15px;font-weight:600;text-align:right;}
-  #map {
-    border: 1.5px solid var(--ink);
-    min-height: 280px;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-  }
 
-  @media (max-width:860px){.contact-grid{grid-template-columns:1fr;}}
+        body {
+            min-height: 100vh;
 
-  /* ---------- FOOTER ---------- */
-  footer{padding:48px 0 36px;}
-  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
-  .foot-links{display:flex;gap:26px;font-size:13px;font-weight:600;color:var(--steel);}
-  .foot-fine{font-size:12.5px;color:var(--steel);margin-top:30px;border-top:1px solid var(--line);padding-top:22px;}
+            color: var(--ink);
+            background: var(--paper);
 
-  /* ---------- REVEAL ---------- */
-  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
-  .reveal.show{opacity:1;transform:translateY(0);}
-</style>
+            font-family:
+                "Archivo",
+                sans-serif;
+
+            -webkit-font-smoothing:
+                antialiased;
+
+            overflow-x: hidden;
+        }
+
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            z-index: -2;
+
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(22, 24, 28, 0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(22, 24, 28, 0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                64px 64px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 85%
+                );
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        button {
+            font: inherit;
+        }
+
+
+        .wrap {
+            width:
+                min(
+                    1180px,
+                    calc(100% - 40px)
+                );
+
+            margin-inline: auto;
+        }
+
+
+        h1,
+        h2,
+        h3,
+        .display {
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            text-transform: uppercase;
+        }
+
+
+
+        /* =========================================================
+           NAVIGATION
+           ========================================================= */
+
+        .site-header {
+            position: fixed;
+
+            top: 16px;
+            left: 0;
+            right: 0;
+
+            z-index: 9999;
+
+            pointer-events: none;
+        }
+
+
+        .nav {
+            width:
+                min(
+                    1180px,
+                    calc(100% - 28px)
+                );
+
+            height: 72px;
+
+            margin: auto;
+
+            padding:
+                0 18px 0 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            pointer-events: auto;
+
+            background:
+                rgba(
+                    243,
+                    241,
+                    236,
+                    0.86
+                );
+
+            border:
+                1px solid var(--line);
+
+            border-radius: 20px;
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            box-shadow:
+                0 15px 45px
+                rgba(22, 24, 28, 0.08);
+        }
+
+
+        /* Logo */
+
+        .logo {
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            font-size: 17px;
+            font-weight: 800;
+
+            letter-spacing:
+                -0.04em;
+
+            text-transform:
+                uppercase;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .logo-mark {
+            width: 39px;
+            height: 39px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            color: var(--paper);
+
+            background:
+                var(--ink);
+        }
+
+
+        .logo-mark svg {
+            width: 20px;
+            height: 20px;
+        }
+
+
+        .logo em {
+            color: var(--signal);
+            font-style: normal;
+        }
+
+
+        /* Links */
+
+        .navlinks {
+            display: flex;
+            align-items: center;
+
+            gap: 3px;
+        }
+
+
+        .navlinks a {
+            position: relative;
+
+            padding:
+                11px 12px;
+
+            border-radius: 10px;
+
+            color: var(--steel);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.035em;
+
+            transition:
+                all 0.2s ease;
+        }
+
+
+        .navlinks a:hover {
+            color: var(--ink);
+
+            background:
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.055
+                );
+        }
+
+
+        /* CTA */
+
+        .navcta {
+            min-height: 44px;
+
+            padding:
+                0 17px;
+
+            display:
+                inline-flex;
+
+            align-items: center;
+            gap: 8px;
+
+            color: var(--paper);
+
+            background:
+                var(--ink);
+
+            border-radius: 11px;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            text-transform:
+                uppercase;
+
+            transition:
+                all 0.22s ease;
+        }
+
+
+        .navcta:hover {
+            color: white;
+
+            background:
+                var(--signal);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .menu-btn {
+            display: none;
+
+            width: 44px;
+            height: 44px;
+
+            place-items: center;
+
+            color: var(--ink);
+
+            border:
+                1px solid var(--line);
+
+            border-radius: 11px;
+
+            background:
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.04
+                );
+
+            cursor: pointer;
+        }
+
+
+
+        /* =========================================================
+           HERO
+           ========================================================= */
+
+        .hero {
+            min-height: 100svh;
+
+            padding:
+                145px 0 90px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+            overflow: hidden;
+
+            border-bottom:
+                1px solid var(--line);
+        }
+
+
+        /* Riesiger dekorativer Kreis */
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 560px;
+            height: 560px;
+
+            right: -160px;
+            top: 190px;
+
+            border-radius:
+                50%;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.17
+                );
+
+            box-shadow:
+
+                0 0 0 60px
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.035
+                ),
+
+                0 0 0 120px
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.02
+                );
+
+            pointer-events: none;
+        }
+
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+
+            display: grid;
+
+            grid-template-columns:
+                1.08fr
+                0.92fr;
+
+            gap: 70px;
+
+            align-items: center;
+        }
+
+
+        /* Eyebrow */
+
+        .eyebrow {
+            width: fit-content;
+
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+
+            padding:
+                8px 12px;
+
+            margin-bottom:
+                24px;
+
+            color:
+                var(--signal-dim);
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.22
+                );
+
+            background:
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.07
+                );
+
+            border-radius:
+                999px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.12em;
+        }
+
+
+        .pulse {
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--signal);
+
+            box-shadow:
+                0 0 0 0
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.4
+                );
+
+            animation:
+                pulse
+                1.8s
+                infinite;
+        }
+
+
+        @keyframes pulse {
+
+            70% {
+                box-shadow:
+                    0 0 0 8px
+                    rgba(
+                        255,
+                        90,
+                        31,
+                        0
+                    );
+            }
+
+        }
+
+
+        /* Headline */
+
+        .hero h1 {
+            max-width:
+                740px;
+
+            font-size:
+                clamp(
+                    52px,
+                    7.1vw,
+                    100px
+                );
+
+            line-height:
+                0.89;
+
+            letter-spacing:
+                -0.065em;
+
+            margin-bottom:
+                28px;
+        }
+
+
+        .hero h1 .outline {
+            color:
+                transparent;
+
+            -webkit-text-stroke:
+                1.8px
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.4
+                );
+        }
+
+
+        .hero h1 .orange {
+            color:
+                var(--signal);
+        }
+
+
+        .hero-copy {
+            max-width:
+                590px;
+
+            color:
+                var(--steel);
+
+            font-size:
+                17px;
+
+            font-weight:
+                500;
+
+            line-height:
+                1.7;
+
+            margin-bottom:
+                35px;
+        }
+
+
+        /* Buttons */
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+
+        .btn {
+            min-height:
+                54px;
+
+            padding:
+                0 22px;
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap: 10px;
+
+            border-radius:
+                12px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.04em;
+
+            transition:
+                all
+                0.23s
+                ease;
+        }
+
+
+        .btn svg {
+            transition:
+                transform
+                0.23s
+                ease;
+        }
+
+
+        .btn:hover svg {
+            transform:
+                translateX(4px);
+        }
+
+
+        .btn-primary {
+            color:
+                var(--paper);
+
+            background:
+                var(--ink);
+
+            border:
+                1.5px solid
+                var(--ink);
+
+            box-shadow:
+                0 16px 35px
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.13
+                );
+        }
+
+
+        .btn-primary:hover {
+            color: white;
+
+            background:
+                var(--signal);
+
+            border-color:
+                var(--signal);
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 20px 40px
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.2
+                );
+        }
+
+
+        .btn-secondary {
+            color:
+                var(--ink);
+
+            border:
+                1.5px solid
+                var(--line-strong);
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.2
+                );
+        }
+
+
+        .btn-secondary:hover {
+            border-color:
+                var(--ink);
+
+            transform:
+                translateY(-3px);
+        }
+
+
+
+        /* =========================================================
+           HANDY HERO VISUAL
+           ========================================================= */
+
+        .device-stage {
+            position: relative;
+
+            min-height:
+                580px;
+
+            display: grid;
+            place-items: center;
+        }
+
+
+        .device-glow {
+            position: absolute;
+
+            width:
+                360px;
+
+            height:
+                360px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--signal);
+
+            filter:
+                blur(120px);
+
+            opacity:
+                0.14;
+        }
+
+
+        /* Smartphone */
+
+        .phone {
+            width:
+                285px;
+
+            height:
+                570px;
+
+            padding:
+                9px;
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            border-radius:
+                48px;
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    #474c55,
+                    #111318 45%,
+                    #3f444c
+                );
+
+            box-shadow:
+
+                0 55px 90px
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.28
+                ),
+
+                inset 0 0 0 1px
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.2
+                );
+
+            animation:
+                floatPhone
+                5s
+                ease-in-out
+                infinite;
+        }
+
+
+        @keyframes floatPhone {
+
+            0%,
+            100% {
+                transform:
+                    translateY(0)
+                    rotate(5deg);
+            }
+
+            50% {
+                transform:
+                    translateY(-18px)
+                    rotate(2deg);
+            }
+
+        }
+
+
+        .phone-screen {
+            height:
+                100%;
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            border-radius:
+                39px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.1
+                );
+
+            background:
+
+                radial-gradient(
+                    circle at 65% 25%,
+                    rgba(
+                        255,
+                        90,
+                        31,
+                        0.8
+                    ),
+                    transparent 29%
+                ),
+
+                radial-gradient(
+                    circle at 25% 65%,
+                    rgba(
+                        255,
+                        90,
+                        31,
+                        0.22
+                    ),
+                    transparent 29%
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #353941,
+                    #111318 70%
+                );
+        }
+
+
+        .dynamic-island {
+            position:
+                absolute;
+
+            top:
+                13px;
+
+            left:
+                50%;
+
+            transform:
+                translateX(-50%);
+
+            width:
+                88px;
+
+            height:
+                24px;
+
+            border-radius:
+                999px;
+
+            background:
+                #060708;
+        }
+
+
+        .phone-content {
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            padding:
+                65px
+                24px
+                24px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                space-between;
+        }
+
+
+        .phone-small {
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.55
+                );
+
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                0.14em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .phone-title {
+            color:
+                white;
+
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            font-size:
+                34px;
+
+            font-weight:
+                800;
+
+            line-height:
+                1;
+
+            letter-spacing:
+                -0.05em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .phone-title span {
+            color:
+                var(--signal-light);
+        }
+
+
+        .phone-card {
+            padding:
+                17px;
+
+            border-radius:
+                18px;
+
+            color:
+                white;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.09
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.1
+                );
+
+            backdrop-filter:
+                blur(12px);
+        }
+
+
+        .phone-card small {
+            display:
+                block;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.55
+                );
+
+            margin-bottom:
+                6px;
+
+            font-size:
+                9px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.1em;
+        }
+
+
+        .phone-card strong {
+            font-size:
+                13px;
+        }
+
+
+
+        /* Floating cards */
+
+        .floating-card {
+            position:
+                absolute;
+
+            z-index:
+                5;
+
+            min-width:
+                175px;
+
+            padding:
+                17px;
+
+            background:
+                rgba(
+                    243,
+                    241,
+                    236,
+                    0.91
+                );
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                17px;
+
+            backdrop-filter:
+                blur(15px);
+
+            box-shadow:
+                0 20px 50px
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.12
+                );
+        }
+
+
+        .floating-card small {
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.1em;
+
+            margin-bottom:
+                7px;
+        }
+
+
+        .floating-card strong {
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            font-size:
+                17px;
+        }
+
+
+        .floating-card strong.orange {
+            color:
+                var(--signal);
+        }
+
+
+        .floating-card.one {
+            top:
+                125px;
+
+            left:
+                -10px;
+        }
+
+
+        .floating-card.two {
+            right:
+                -10px;
+
+            bottom:
+                120px;
+        }
+
+
+
+        /* =========================================================
+           TICKER
+           ========================================================= */
+
+        .ticker-wrap {
+            color:
+                var(--paper);
+
+            background:
+                var(--ink);
+
+            border-bottom:
+                1px solid
+                var(--line);
+
+            overflow:
+                hidden;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .ticker {
+            display:
+                flex;
+
+            width:
+                max-content;
+
+            animation:
+                tickerMove
+                26s
+                linear
+                infinite;
+        }
+
+
+        .ticker span {
+            padding:
+                17px 27px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                0.09em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .ticker b {
+            color:
+                var(--signal);
+
+            margin-right:
+                24px;
+        }
+
+
+        @keyframes tickerMove {
+
+            to {
+                transform:
+                    translateX(-50%);
+            }
+
+        }
+
+
+
+        /* =========================================================
+           ALLGEMEINE SEKTIONEN
+           ========================================================= */
+
+        .section {
+            padding:
+                110px 0;
+
+            border-bottom:
+                1px solid
+                var(--line);
+        }
+
+
+        .section-head {
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr auto;
+
+            align-items:
+                end;
+
+            gap:
+                45px;
+
+            margin-bottom:
+                48px;
+        }
+
+
+        .kicker {
+            color:
+                var(--signal-dim);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                0.13em;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                13px;
+        }
+
+
+        .section-title {
+            max-width:
+                760px;
+
+            font-size:
+                clamp(
+                    37px,
+                    5vw,
+                    64px
+                );
+
+            line-height:
+                0.98;
+
+            letter-spacing:
+                -0.04em;
+        }
+
+
+        .section-desc {
+            max-width:
+                370px;
+
+            color:
+                var(--steel);
+
+            font-size:
+                14px;
+
+            font-weight:
+                500;
+
+            line-height:
+                1.7;
+        }
+
+
+
+        /* =========================================================
+           LEISTUNGEN
+           ========================================================= */
+
+        .services {
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    12,
+                    1fr
+                );
+
+            gap:
+                14px;
+        }
+
+
+        .service-card {
+            min-height:
+                300px;
+
+            padding:
+                29px;
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.22
+                );
+
+            transition:
+                all
+                0.28s
+                ease;
+        }
+
+
+        .service-card:nth-child(1),
+        .service-card:nth-child(4) {
+            grid-column:
+                span 7;
+        }
+
+
+        .service-card:nth-child(2),
+        .service-card:nth-child(3) {
+            grid-column:
+                span 5;
+        }
+
+
+        .service-card:hover {
+            color:
+                var(--paper);
+
+            background:
+                var(--ink);
+
+            border-color:
+                var(--ink);
+
+            transform:
+                translateY(-7px);
+
+            box-shadow:
+                var(--shadow);
+        }
+
+
+        .service-card:hover p {
+            color:
+                #b9bdc4;
+        }
+
+
+        .service-card:hover .service-icon {
+            color:
+                white;
+
+            background:
+                var(--signal);
+
+            border-color:
+                var(--signal);
+        }
+
+
+        .service-number {
+            position:
+                absolute;
+
+            top:
+                15px;
+
+            right:
+                20px;
+
+            color:
+                rgba(
+                    22,
+                    24,
+                    28,
+                    0.08
+                );
+
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            font-size:
+                58px;
+
+            font-weight:
+                800;
+        }
+
+
+        .service-card:hover .service-number {
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+        }
+
+
+        .service-icon {
+            width:
+                49px;
+
+            height:
+                49px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            margin-bottom:
+                50px;
+
+            color:
+                var(--ink);
+
+            background:
+                transparent;
+
+            border:
+                1.5px solid
+                var(--ink);
+
+            border-radius:
+                13px;
+
+            transition:
+                all
+                0.28s
+                ease;
+        }
+
+
+        .service-card h3 {
+            font-size:
+                22px;
+
+            letter-spacing:
+                -0.03em;
+
+            margin-bottom:
+                11px;
+        }
+
+
+        .service-card p {
+            max-width:
+                450px;
+
+            color:
+                var(--steel);
+
+            font-size:
+                14px;
+
+            font-weight:
+                500;
+
+            line-height:
+                1.65;
+
+            margin-bottom:
+                22px;
+
+            transition:
+                color
+                0.28s
+                ease;
+        }
+
+
+        .service-link {
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            color:
+                var(--signal-dim);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .service-card:hover .service-link {
+            color:
+                var(--signal-light);
+        }
+
+
+
+        /* =========================================================
+           WERKSTATT
+           ========================================================= */
+
+        .workshop-grid {
+            display:
+                grid;
+
+            grid-template-columns:
+                0.8fr
+                1.2fr;
+
+            gap:
+                16px;
+        }
+
+
+        .workshop-info {
+            min-height:
+                480px;
+
+            padding:
+                34px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                space-between;
+
+            color:
+                var(--paper);
+
+            background:
+                var(--ink);
+
+            border-radius:
+                23px;
+
+            border:
+                1px solid
+                var(--ink);
+        }
+
+
+        .workshop-info .kicker {
+            color:
+                var(--signal-light);
+        }
+
+
+        .workshop-info h3 {
+            max-width:
+                420px;
+
+            font-size:
+                32px;
+
+            letter-spacing:
+                -0.04em;
+
+            margin-bottom:
+                14px;
+        }
+
+
+        .workshop-info > div > p {
+            color:
+                #b6bac0;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.7;
+        }
+
+
+        .status-list {
+            display:
+                grid;
+
+            margin-top:
+                30px;
+        }
+
+
+        .status-row {
+            padding:
+                15px 0;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                20px;
+
+            border-top:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            font-size:
+                13px;
+        }
+
+
+        .status-row span {
+            color:
+                #b6bac0;
+        }
+
+
+        .status-row strong {
+            color:
+                var(--signal-light);
+        }
+
+
+
+        /* Video */
+
+        .video-container {
+            min-height:
+                480px;
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                23px;
+
+            background:
+
+                radial-gradient(
+                    circle at 50% 30%,
+                    rgba(
+                        255,
+                        90,
+                        31,
+                        0.13
+                    ),
+                    transparent 35%
+                ),
+
+                var(--paper-2);
+        }
+
+
+        .video-container iframe,
+        .video-container video {
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            border:
+                0;
+
+            object-fit:
+                cover;
+        }
+
+
+        .video-placeholder {
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            text-align:
+                center;
+
+            padding:
+                30px;
+        }
+
+
+        .play-button {
+            width:
+                78px;
+
+            height:
+                78px;
+
+            margin:
+                0 auto
+                21px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                white;
+
+            background:
+                var(--signal);
+
+            border-radius:
+                50%;
+
+            box-shadow:
+
+                0 0 0 12px
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.09
+                ),
+
+                0 18px 35px
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.18
+                );
+        }
+
+
+        .video-placeholder strong {
+            display:
+                block;
+
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            font-size:
+                23px;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .video-placeholder span {
+            color:
+                var(--steel);
+
+            font-size:
+                13px;
+        }
+
+
+
+        /* =========================================================
+           TESTIMONIALS
+           ========================================================= */
+
+        .reviews {
+            padding:
+                110px 0;
+
+            color:
+                var(--paper);
+
+            background:
+                var(--ink);
+
+            overflow:
+                hidden;
+        }
+
+
+        .reviews-inner {
+            max-width:
+                920px;
+
+            margin:
+                auto;
+
+            text-align:
+                center;
+        }
+
+
+        .reviews .kicker {
+            color:
+                var(--signal-light);
+        }
+
+
+        .stars {
+            color:
+                var(--signal);
+
+            font-size:
+                19px;
+
+            letter-spacing:
+                6px;
+
+            margin:
+                20px 0
+                20px;
+        }
+
+
+        .testi-slider {
+            position:
+                relative;
+
+            min-height:
+                270px;
+        }
+
+
+        .testi-slide {
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            opacity:
+                0;
+
+            visibility:
+                hidden;
+
+            transform:
+                translateY(18px);
+
+            transition:
+                opacity
+                0.55s
+                ease,
+                transform
+                0.55s
+                ease,
+                visibility
+                0.55s;
+        }
+
+
+        .testi-slide.active {
+            opacity:
+                1;
+
+            visibility:
+                visible;
+
+            transform:
+                translateY(0);
+        }
+
+
+        .testi-quote {
+            max-width:
+                850px;
+
+            font-family:
+                "Archivo Expanded",
+                sans-serif;
+
+            font-size:
+                clamp(
+                    24px,
+                    3vw,
+                    38px
+                );
+
+            line-height:
+                1.28;
+
+            letter-spacing:
+                -0.03em;
+
+            margin-bottom:
+                27px;
+        }
+
+
+        .testi-meta {
+            color:
+                #999da4;
+
+            font-size:
+                13px;
+        }
+
+
+        .testi-meta strong {
+            display:
+                block;
+
+            color:
+                white;
+
+            margin-bottom:
+                5px;
+        }
+
+
+        .review-dots {
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                8px;
+        }
+
+
+        .review-dot {
+            width:
+                7px;
+
+            height:
+                7px;
+
+            padding:
+                0;
+
+            border:
+                0;
+
+            border-radius:
+                50%;
+
+            background:
+                #4c5057;
+
+            cursor:
+                pointer;
+
+            transition:
+                all 0.2s ease;
+        }
+
+
+        .review-dot.active {
+            width:
+                22px;
+
+            border-radius:
+                999px;
+
+            background:
+                var(--signal);
+        }
+
+
+
+        /* =========================================================
+           KONTAKT
+           ========================================================= */
+
+        .contact-grid {
+            display:
+                grid;
+
+            grid-template-columns:
+                0.9fr
+                1.1fr;
+
+            gap:
+                16px;
+        }
+
+
+        .contact-card {
+            padding:
+                34px;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                23px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.25
+                );
+        }
+
+
+        .contact-badge {
+            width:
+                fit-content;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            padding:
+                7px 11px;
+
+            margin-bottom:
+                30px;
+
+            color:
+                var(--signal-dim);
+
+            background:
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.08
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    90,
+                    31,
+                    0.18
+                );
+
+            border-radius:
+                999px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.1em;
+        }
+
+
+        .contact-card h3 {
+            font-size:
+                31px;
+
+            letter-spacing:
+                -0.04em;
+
+            margin-bottom:
+                13px;
+        }
+
+
+        .contact-intro {
+            color:
+                var(--steel);
+
+            font-size:
+                14px;
+
+            line-height:
+                1.7;
+
+            margin-bottom:
+                27px;
+        }
+
+
+        .info-row {
+            display:
+                grid;
+
+            grid-template-columns:
+                105px 1fr;
+
+            gap:
+                20px;
+
+            padding:
+                17px 0;
+
+            border-top:
+                1px solid
+                var(--line);
+        }
+
+
+        .info-row .k {
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            font-weight:
+                600;
+        }
+
+
+        .info-row .v {
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+        }
+
+
+        .call-button {
+            width:
+                100%;
+
+            margin-top:
+                27px;
+        }
+
+
+
+        /* =========================================================
+           KARTE
+           ========================================================= */
+
+        #map {
+            width:
+                100%;
+
+            min-height:
+                520px;
+
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                23px;
+
+            filter:
+                saturate(0.75)
+                contrast(1.02);
+        }
+
+
+        .leaflet-control-attribution {
+            font-size:
+                9px !important;
+        }
+
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        footer {
+            padding:
+                48px 0 34px;
+
+            background:
+                var(--paper);
+        }
+
+
+        .footer-top {
+            padding-bottom:
+                30px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                30px;
+
+            flex-wrap:
+                wrap;
+
+            border-bottom:
+                1px solid
+                var(--line);
+        }
+
+
+        .footer-links {
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                23px;
+
+            color:
+                var(--steel);
+
+            font-size:
+                12px;
+
+            font-weight:
+                600;
+        }
+
+
+        .footer-links a {
+            transition:
+                color
+                0.2s ease;
+        }
+
+
+        .footer-links a:hover {
+            color:
+                var(--signal);
+        }
+
+
+        .footer-bottom {
+            padding-top:
+                22px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                15px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+        }
+
+
+
+        /* =========================================================
+           SCROLL ANIMATION
+           ========================================================= */
+
+        .reveal {
+            opacity:
+                0;
+
+            transform:
+                translateY(24px);
+
+            transition:
+                opacity
+                0.7s
+                ease,
+                transform
+                0.7s
+                ease;
+        }
+
+
+        .reveal.show {
+            opacity:
+                1;
+
+            transform:
+                translateY(0);
+        }
+
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 950px) {
+
+            .hero-inner {
+                grid-template-columns:
+                    1fr;
+
+                gap:
+                    35px;
+            }
+
+
+            .hero {
+                padding-top:
+                    140px;
+
+                text-align:
+                    center;
+            }
+
+
+            .eyebrow {
+                margin-left:
+                    auto;
+
+                margin-right:
+                    auto;
+            }
+
+
+            .hero-copy {
+                margin-left:
+                    auto;
+
+                margin-right:
+                    auto;
+            }
+
+
+            .hero-actions {
+                justify-content:
+                    center;
+            }
+
+
+            .device-stage {
+                min-height:
+                    520px;
+            }
+
+
+            .section-head {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .section-desc {
+                max-width:
+                    620px;
+            }
+
+
+            .workshop-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .contact-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            #map {
+                min-height:
+                    420px;
+            }
+
+        }
+
+
+
+        @media (max-width: 760px) {
+
+            .navlinks {
+                position:
+                    absolute;
+
+                top:
+                    82px;
+
+                left:
+                    14px;
+
+                right:
+                    14px;
+
+                padding:
+                    10px;
+
+                display:
+                    none;
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    stretch;
+
+                background:
+                    rgba(
+                        243,
+                        241,
+                        236,
+                        0.97
+                    );
+
+                border:
+                    1px solid
+                    var(--line);
+
+                border-radius:
+                    16px;
+
+                box-shadow:
+                    0 20px 50px
+                    rgba(
+                        22,
+                        24,
+                        28,
+                        0.12
+                    );
+
+                backdrop-filter:
+                    blur(15px);
+            }
+
+
+            .navlinks.open {
+                display:
+                    flex;
+            }
+
+
+            .navlinks a {
+                padding:
+                    14px;
+            }
+
+
+            .desktop-cta {
+                display:
+                    none;
+            }
+
+
+            .menu-btn {
+                display:
+                    grid;
+            }
+
+
+            .services {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .service-card:nth-child(n) {
+                grid-column:
+                    auto;
+            }
+
+        }
+
+
+
+        @media (max-width: 560px) {
+
+            .wrap {
+                width:
+                    calc(
+                        100% - 28px
+                    );
+            }
+
+
+            .hero {
+                padding-bottom:
+                    65px;
+            }
+
+
+            .hero h1 {
+                font-size:
+                    clamp(
+                        47px,
+                        15vw,
+                        70px
+                    );
+            }
+
+
+            .hero-copy {
+                font-size:
+                    15px;
+            }
+
+
+            .hero-actions {
+                flex-direction:
+                    column;
+            }
+
+
+            .btn {
+                width:
+                    100%;
+            }
+
+
+            .device-stage {
+                min-height:
+                    440px;
+            }
+
+
+            .phone {
+                width:
+                    218px;
+
+                height:
+                    435px;
+
+                border-radius:
+                    38px;
+            }
+
+
+            .phone-screen {
+                border-radius:
+                    31px;
+            }
+
+
+            .phone-content {
+                padding:
+                    55px
+                    18px
+                    18px;
+            }
+
+
+            .phone-title {
+                font-size:
+                    28px;
+            }
+
+
+            .floating-card {
+                min-width:
+                    135px;
+
+                padding:
+                    12px;
+            }
+
+
+            .floating-card.one {
+                left:
+                    0;
+
+                top:
+                    95px;
+            }
+
+
+            .floating-card.two {
+                right:
+                    0;
+
+                bottom:
+                    75px;
+            }
+
+
+            .floating-card strong {
+                font-size:
+                    14px;
+            }
+
+
+            .section {
+                padding:
+                    80px 0;
+            }
+
+
+            .section-title {
+                font-size:
+                    39px;
+            }
+
+
+            .service-card {
+                min-height:
+                    280px;
+
+                padding:
+                    23px;
+            }
+
+
+            .workshop-info {
+                padding:
+                    25px;
+
+                min-height:
+                    420px;
+            }
+
+
+            .video-container {
+                min-height:
+                    340px;
+            }
+
+
+            .reviews {
+                padding:
+                    80px 0;
+            }
+
+
+            .testi-slider {
+                min-height:
+                    340px;
+            }
+
+
+            .testi-quote {
+                font-size:
+                    23px;
+            }
+
+
+            .contact-card {
+                padding:
+                    24px;
+            }
+
+
+            .info-row {
+                grid-template-columns:
+                    1fr;
+
+                gap:
+                    6px;
+            }
+
+
+            #map {
+                min-height:
+                    350px;
+            }
+
+        }
+
+
+
+        @media (prefers-reduced-motion: reduce) {
+
+            * {
+                scroll-behavior:
+                    auto !important;
+
+                animation:
+                    none !important;
+
+                transition:
+                    none !important;
+            }
+
+        }
+
+    </style>
 </head>
+
+
 <body>
 
-<header>
-  <div class="nav">
-    <div class="logo"><span class="dot"></span>HANDY GERMANY</div>
-    <nav class="navlinks">
-      <a href="#leistungen">Leistungen</a>
-      <a href="#video">Einblick</a>
-      <a href="#kontakt">Kontakt</a>
-    </nav>
-    <a href="#kontakt" class="navcta">Kontakt</a>
-  </div>
+
+<!-- =========================================================
+     NAVIGATION
+     ========================================================= -->
+
+<header class="site-header">
+
+    <div class="nav">
+
+        <a href="#" class="logo">
+
+            <span class="logo-mark">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                >
+                    <rect
+                        x="7"
+                        y="3"
+                        width="10"
+                        height="18"
+                        rx="2.5"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                    />
+
+                    <path
+                        d="M10 6h4M11 18h2"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+                </svg>
+
+            </span>
+
+            <span>
+                Handy
+                <em>Germany</em>
+            </span>
+
+        </a>
+
+
+        <nav
+            class="navlinks"
+            id="navlinks"
+        >
+
+            <a href="#leistungen">
+                Leistungen
+            </a>
+
+            <a href="#werkstatt">
+                Werkstatt
+            </a>
+
+            <a href="#bewertungen">
+                Bewertungen
+            </a>
+
+            <a href="#kontakt">
+                Kontakt
+            </a>
+
+        </nav>
+
+
+        <a
+            href="#kontakt"
+            class="navcta desktop-cta"
+        >
+
+            Besuch planen
+
+            <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+            >
+                <path
+                    d="M5 12h14M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+
+        </a>
+
+
+        <button
+            class="menu-btn"
+            id="menuBtn"
+            aria-label="Menü öffnen"
+            aria-expanded="false"
+        >
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+            >
+                <path
+                    d="M4 7h16M4 12h16M4 17h16"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+            </svg>
+
+        </button>
+
+    </div>
+
 </header>
 
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<main>
+
 <section class="hero">
-  <div class="hero-grid"></div>
-  <div class="wrap hero-inner">
-    <div>
-      <div class="eyebrow">Berlin</div>
-      <h1 class="hero-title">Dein Handy.<br>Repariert<span class="o">.</span><br>Heute<span class="o">.</span></h1>
-      <p class="hero-sub">Reparatur, geprüfte Smartphones und Zubehör — ehrlich kalkuliert, in Berlin geprüft und meist noch am selben Tag erledigt.</p>
-      <div class="hero-actions">
-        <a href="#kontakt" class="btn-primary">
-          So findest du uns
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="#leistungen" class="btn-secondary">Leistungen ansehen</a>
-      </div>
+
+    <div class="wrap hero-inner">
+
+        <!-- Text -->
+
+        <div>
+
+            <div class="eyebrow">
+
+                <span class="pulse"></span>
+
+                Berlin · Charlottenburg
+
+            </div>
+
+
+            <h1>
+
+                DEIN HANDY.<br>
+
+                <span class="outline">
+                    WIEDER
+                </span>
+
+                <br>
+
+                <span class="orange">
+                    WIE NEU.
+                </span>
+
+            </h1>
+
+
+            <p class="hero-copy">
+
+                Display kaputt? Akku schwach?
+                Neues Smartphone gesucht?
+
+                Bei Handy Germany bekommst du
+                Reparatur, geprüfte Geräte und
+                Zubehör direkt am Stuttgarter Platz
+                in Berlin.
+
+            </p>
+
+
+            <div class="hero-actions">
+
+                <a
+                    href="#kontakt"
+                    class="btn btn-primary"
+                >
+
+                    So findest du uns
+
+                    <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M5 12h14M13 6l6 6-6 6"
+                            stroke="currentColor"
+                            stroke-width="2.4"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </a>
+
+
+                <a
+                    href="#leistungen"
+                    class="btn btn-secondary"
+                >
+
+                    Leistungen ansehen
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Handy Visual -->
+
+        <div class="device-stage">
+
+            <div class="device-glow"></div>
+
+
+            <div class="phone">
+
+                <div class="phone-screen">
+
+                    <div class="dynamic-island"></div>
+
+
+                    <div class="phone-content">
+
+                        <div class="phone-small">
+
+                            Handy Germany /
+                            Berlin
+
+                        </div>
+
+
+                        <div class="phone-title">
+
+                            BROKEN?<br>
+
+                            <span>
+                                FIXED.
+                            </span>
+
+                        </div>
+
+
+                        <div class="phone-card">
+
+                            <small>
+                                Werkstatt
+                            </small>
+
+                            <strong>
+                                Stuttgarter Platz 1a
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="floating-card one">
+
+                <small>
+                    Display-Wechsel
+                </small>
+
+                <strong class="orange">
+                    ab 1 Std.
+                </strong>
+
+            </div>
+
+
+            <div class="floating-card two">
+
+                <small>
+                    Folienwechsel
+                </small>
+
+                <strong>
+                    Sofort
+                </strong>
+
+            </div>
+
+        </div>
+
     </div>
-    <div class="hero-panel">
-      <div class="label">Werkstatt-Status</div>
-      <div class="stat-row"><span class="k">Display-Wechsel</span><span class="v signal">ab 1 Std.</span></div>
-      <div class="stat-row"><span class="k">Akku-Tausch</span><span class="v signal">ab 1 Std.</span></div>
-      <div class="stat-row"><span class="k">Folienwechsel</span><span class="v signal">Sofort</span></div>
-      <div class="stat-row"><span class="k">Wartezeit</span><span class="v">Meist vor Ort</span></div>
-    </div>
-  </div>
+
 </section>
 
-<div class="ticker">
-  <div class="ticker-track">
-    <span><span class="dot">●</span>Display-Reparatur ab 30 Minuten</span>
-    <span><span class="dot">●</span>Akku-Tausch ab 25 Minuten</span>
-    <span><span class="dot">●</span>Panzerglas & Handyhüllen</span>
-    <span><span class="dot">●</span>Geprüfte Refurbished-Geräte</span>
-    <span><span class="dot">●</span>Display-Reparatur ab 30 Minuten</span>
-    <span><span class="dot">●</span>Akku-Tausch ab 25 Minuten</span>
-    <span><span class="dot">●</span>Panzerglas & Handyhüllen</span>
-    <span><span class="dot">●</span>Geprüfte Refurbished-Geräte</span>
-  </div>
+
+
+<!-- =========================================================
+     TICKER
+     ========================================================= -->
+
+<div class="ticker-wrap">
+
+    <div class="ticker">
+
+        <span>
+            <b>●</b>
+            Display-Reparatur
+        </span>
+
+        <span>
+            <b>●</b>
+            Akku-Tausch
+        </span>
+
+        <span>
+            <b>●</b>
+            Panzerglas & Hüllen
+        </span>
+
+        <span>
+            <b>●</b>
+            Refurbished-Geräte
+        </span>
+
+        <span>
+            <b>●</b>
+            Berlin Charlottenburg
+        </span>
+
+
+        <!-- doppelt für Endlosanimation -->
+
+        <span>
+            <b>●</b>
+            Display-Reparatur
+        </span>
+
+        <span>
+            <b>●</b>
+            Akku-Tausch
+        </span>
+
+        <span>
+            <b>●</b>
+            Panzerglas & Hüllen
+        </span>
+
+        <span>
+            <b>●</b>
+            Refurbished-Geräte
+        </span>
+
+        <span>
+            <b>●</b>
+            Berlin Charlottenburg
+        </span>
+
+    </div>
+
 </div>
 
-<section class="section" id="leistungen">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="section-num">01 — Leistungen</div>
-        <h2 class="section-title">Alles rund um dein Smartphone, an einem Ort</h2>
-      </div>
-      <p class="section-desc">Reparatur, geprüfte Geräte und schützendes Zubehör aus einer Hand — wir kümmern uns um die Technik, du musst dir keine Gedanken machen.</p>
+
+
+<!-- =========================================================
+     LEISTUNGEN
+     ========================================================= -->
+
+<section
+    class="section"
+    id="leistungen"
+>
+
+    <div class="wrap">
+
+
+        <div class="section-head reveal">
+
+            <div>
+
+                <div class="kicker">
+
+                    01 / Leistungen
+
+                </div>
+
+
+                <h2 class="section-title">
+
+                    ALLES FÜR DEIN
+                    SMARTPHONE.
+                    AN EINEM ORT.
+
+                </h2>
+
+            </div>
+
+
+            <p class="section-desc">
+
+                Reparatur, geprüfte Geräte
+                und schützendes Zubehör
+                aus einer Hand.
+
+                Wir kümmern uns um die Technik,
+                damit du dich um nichts kümmern musst.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="services">
+
+
+            <!-- DISPLAY -->
+
+            <article class="service-card reveal">
+
+                <div class="service-number">
+                    01
+                </div>
+
+
+                <div class="service-icon">
+
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <rect
+                            x="6"
+                            y="2"
+                            width="12"
+                            height="20"
+                            rx="2.5"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        />
+
+                        <path
+                            d="M10 19h4"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h3>
+                    Display-Reparatur
+                </h3>
+
+
+                <p>
+
+                    Gesprungenes, flackerndes
+                    oder ausgefallenes Display?
+
+                    Wir tauschen es fachgerecht
+                    und bringen dein Smartphone
+                    wieder zurück in den Alltag.
+
+                </p>
+
+
+                <a
+                    href="#kontakt"
+                    class="service-link"
+                >
+
+                    Reparatur anfragen
+                    <span>→</span>
+
+                </a>
+
+            </article>
+
+
+
+            <!-- AKKU -->
+
+            <article class="service-card reveal">
+
+                <div class="service-number">
+                    02
+                </div>
+
+
+                <div class="service-icon">
+
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <rect
+                            x="7"
+                            y="4"
+                            width="10"
+                            height="16"
+                            rx="2"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        />
+
+                        <path
+                            d="M10 8l-1 4h3l-1 4 5-6h-3l1-2"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h3>
+                    Akku-Tausch
+                </h3>
+
+
+                <p>
+
+                    Dein Akku hält kaum noch
+                    durch?
+
+                    Wir ersetzen ihn und
+                    geben deinem Smartphone
+                    wieder Ausdauer.
+
+                </p>
+
+
+                <a
+                    href="#kontakt"
+                    class="service-link"
+                >
+
+                    Akku prüfen lassen
+                    <span>→</span>
+
+                </a>
+
+            </article>
+
+
+
+            <!-- REFURBISHED -->
+
+            <article class="service-card reveal">
+
+                <div class="service-number">
+                    03
+                </div>
+
+
+                <div class="service-icon">
+
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M12 3l2.2 5.1L20 9l-4.2 3.8L17 18.5 12 15.6 7 18.5l1.2-5.7L4 9l5.8-.9L12 3z"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h3>
+                    Refurbished-Geräte
+                </h3>
+
+
+                <p>
+
+                    Geprüfte Gebrauchtgeräte
+                    als clevere Alternative
+                    zum Neukauf.
+
+                    Direkt vor Ort ansehen
+                    und auswählen.
+
+                </p>
+
+
+                <a
+                    href="#kontakt"
+                    class="service-link"
+                >
+
+                    Geräte ansehen
+                    <span>→</span>
+
+                </a>
+
+            </article>
+
+
+
+            <!-- ZUBEHÖR -->
+
+            <article class="service-card reveal">
+
+                <div class="service-number">
+                    04
+                </div>
+
+
+                <div class="service-icon">
+
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h3>
+                    Panzerglas & Hüllen
+                </h3>
+
+
+                <p>
+
+                    Schutz, der direkt passt.
+
+                    Wir montieren dein neues
+                    Panzerglas sauber und
+                    haben passende Hüllen
+                    direkt im Shop.
+
+                </p>
+
+
+                <a
+                    href="#kontakt"
+                    class="service-link"
+                >
+
+                    Vor Ort auswählen
+                    <span>→</span>
+
+                </a>
+
+            </article>
+
+
+        </div>
+
     </div>
-    <div class="services">
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M10 19h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </div>
-        <h3>Display-Reparatur</h3>
-        <p>Gesprungenes oder totes Display? Wir ersetzen es mit Originalqualität — meist während du wartest.</p>
-        <a href="#kontakt" class="service-link">Mehr erfahren <svg width="14" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2"/></svg></a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 2h6l1 3h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2L7 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>Akku-Tausch</h3>
-        <p>Schlappe Laufzeit? Neuer Akku, geprüfte Kapazität, eingebaut in unter 30 Minuten.</p>
-        <a href="#kontakt" class="service-link">Mehr erfahren <svg width="14" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2"/></svg></a>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4.5L6 21l1.5-7.5L2 9h7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        </div>
-        <h3>Refurbished-Geräte</h3>
-        <p>Geprüfte Gebrauchtgeräte mit Garantie — die nachhaltige Alternative zum Neukauf.</p>
-        <a href="#kontakt" class="service-link">Mehr erfahren <svg width="14" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2"/></svg></a>
-      </div>
-      <!-- NEUE ZUBEHÖR KARTE -->
-      <div class="service-card reveal">
-        <div class="service-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3>Panzerglas & Hüllen</h3>
-        <p>Schütze dein Handy. Wir montieren dein neues Panzerglas blasenfrei und haben eine große Auswahl an Hüllen.</p>
-        <a href="#kontakt" class="service-link">Mehr erfahren <svg width="14" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2"/></svg></a>
-      </div>
-    </div>
-  </div>
+
 </section>
 
-<!-- NEUE VIDEO SECTION -->
-<section class="section" id="video">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="section-num">02 — Einblick</div>
-        <h2 class="section-title">Ein Blick in unsere Werkstatt</h2>
-      </div>
-      <p class="section-desc">Präzision und Sorgfalt bei jedem Handgriff. Überzeuge dich selbst, wie wir dein Smartphone wieder in Form bringen.</p>
-    </div>
-    
-    <div class="video-container reveal">
-      <!-- HIER KANNST DU DEIN VIDEO EINFÜGEN (z.B. ein YouTube iframe oder ein <video> Tag) -->
-      <div class="video-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
-        <span>Platzhalter für dein Werkstatt-Video</span>
-      </div>
-      
-      <!-- BEISPIEL FÜR EIN LOKALES VIDEO:
-      <video src="dein-video.mp4" controls poster="dein-vorschaubild.jpg"></video>
-      -->
-      <!-- BEISPIEL FÜR YOUTUBE:
-      <iframe src="https://www.youtube.com/embed/DEINE_VIDEO_ID" title="Werkstatt Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      -->
+
+
+<!-- =========================================================
+     WERKSTATT
+     ========================================================= -->
+
+<section
+    class="section"
+    id="werkstatt"
+>
+
+    <div class="wrap">
+
+
+        <div class="section-head reveal">
+
+            <div>
+
+                <div class="kicker">
+                    02 / Werkstatt
+                </div>
+
+
+                <h2 class="section-title">
+
+                    TECHNIK,
+                    DIE MAN NICHT
+                    VERSTECKEN MUSS.
+
+                </h2>
+
+            </div>
+
+
+            <p class="section-desc">
+
+                Präzision und Sorgfalt bei
+                jedem Handgriff.
+
+                Hier kannst du dein eigenes
+                Werkstatt-Video oder Reel
+                einsetzen.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="workshop-grid">
+
+
+            <div class="workshop-info reveal">
+
+                <div>
+
+                    <div class="kicker">
+
+                        Werkstatt-Status
+
+                    </div>
+
+
+                    <h3>
+
+                        DIREKT VOR ORT.
+                        OHNE UMWEGE.
+
+                    </h3>
+
+
+                    <p>
+
+                        Viele Arbeiten lassen
+                        sich direkt bei uns
+                        erledigen.
+
+                        Frag kurz nach deinem
+                        Modell und wir sagen dir,
+                        was möglich ist.
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="status-list">
+
+                    <div class="status-row">
+
+                        <span>
+                            Display-Wechsel
+                        </span>
+
+                        <strong>
+                            ab 1 Std.
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span>
+                            Akku-Tausch
+                        </span>
+
+                        <strong>
+                            ab 1 Std.
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span>
+                            Folienwechsel
+                        </span>
+
+                        <strong>
+                            Sofort
+                        </strong>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <span>
+                            Beratung
+                        </span>
+
+                        <strong>
+                            Vor Ort
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- VIDEO -->
+
+            <div class="video-container reveal">
+
+                <!--
+
+                DEIN LOKALES VIDEO:
+
+                <video
+                    src="dein-video.mp4"
+                    controls
+                    poster="vorschaubild.jpg"
+                ></video>
+
+
+                ODER YOUTUBE:
+
+
+                <iframe
+                    src="https://www.youtube.com/embed/DEINE_VIDEO_ID"
+                    title="Handy Germany Werkstatt"
+                    allowfullscreen
+                ></iframe>
+
+                -->
+
+
+                <div class="video-placeholder">
+
+                    <div>
+
+                        <div class="play-button">
+
+                            <svg
+                                width="26"
+                                height="26"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+
+                                <path
+                                    d="M9 7l8 5-8 5V7z"
+                                    fill="currentColor"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <strong>
+
+                            Dein Werkstatt-Video
+
+                        </strong>
+
+
+                        <span>
+
+                            Hier Video oder Reel einsetzen
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
     </div>
 
-  </div>
 </section>
 
-<section class="testi">
-  <div class="wrap testi-slider" id="testimonial-slider">
-    
-    <div class="testi-slide active">
-      <p class="testi-quote">„Super Handyladen.<br>Wird freundlich und professionell geholfen.<br>Vielen Dank.“</p>
-      <div class="testi-meta"><strong>Rxx</strong>Vor 35 Wochen</div>
-    </div>
-    
-    <div class="testi-slide">
-      <p class="testi-quote">„Super Preis-Leistungs-Verhältnis. Mein Handy wurde innerhalb einer Stunde repariert. Eine neue Sicherheitsfolie wurde angebracht.“</p>
-      <div class="testi-meta"><strong>Kristina Falkenau</strong>Local Guide • 11.09.2024</div>
-    </div>
-    
-    <div class="testi-slide">
-      <p class="testi-quote">„Bester Handyladen in der Hauptstadt! Kann ich jedem Empfehlen!“</p>
-      <div class="testi-meta"><strong>Selçuk Özkara</strong>Vor 35 Wochen</div>
-    </div>
-    
-    <div class="testi-slide">
-      <p class="testi-quote">„Best place ever. Will only go there for anything involving Handy/repair etc.“</p>
-      <div class="testi-meta"><strong>Taylor Aldridge</strong>Local Guide • 20.09.2024</div>
-    </div>
-    
-    <div class="testi-slide">
-      <p class="testi-quote">„Ich lasse hier schon viele Jahre meine Geräte reparieren. Sehr kompetent, freundlich und günstig !!!!“</p>
-      <div class="testi-meta"><strong>Angela Keith</strong>Local Guide • 08.05.2021</div>
+
+
+<!-- =========================================================
+     BEWERTUNGEN
+     ========================================================= -->
+
+<section
+    class="reviews"
+    id="bewertungen"
+>
+
+    <div class="wrap reviews-inner">
+
+
+        <div class="kicker reveal">
+
+            03 / Kundenstimmen
+
+        </div>
+
+
+        <div class="stars reveal">
+
+            ★★★★★
+
+        </div>
+
+
+
+        <div
+            class="testi-slider reveal"
+            id="testimonialSlider"
+        >
+
+
+            <div class="testi-slide active">
+
+                <p class="testi-quote">
+
+                    „Super Handyladen.
+                    Wird freundlich und
+                    professionell geholfen.
+                    Vielen Dank.“
+
+                </p>
+
+
+                <div class="testi-meta">
+
+                    <strong>
+                        Rxx
+                    </strong>
+
+                    Vor 35 Wochen
+
+                </div>
+
+            </div>
+
+
+
+            <div class="testi-slide">
+
+                <p class="testi-quote">
+
+                    „Super Preis-Leistungs-Verhältnis.
+                    Mein Handy wurde innerhalb einer
+                    Stunde repariert. Eine neue
+                    Sicherheitsfolie wurde angebracht.“
+
+                </p>
+
+
+                <div class="testi-meta">
+
+                    <strong>
+                        Kristina Falkenau
+                    </strong>
+
+                    Local Guide · 11.09.2024
+
+                </div>
+
+            </div>
+
+
+
+            <div class="testi-slide">
+
+                <p class="testi-quote">
+
+                    „Bester Handyladen
+                    in der Hauptstadt!
+                    Kann ich jedem empfehlen!“
+
+                </p>
+
+
+                <div class="testi-meta">
+
+                    <strong>
+                        Selçuk Özkara
+                    </strong>
+
+                    Vor 35 Wochen
+
+                </div>
+
+            </div>
+
+
+
+            <div class="testi-slide">
+
+                <p class="testi-quote">
+
+                    „Best place ever.
+                    Will only go there for
+                    anything involving
+                    Handy / repair etc.“
+
+                </p>
+
+
+                <div class="testi-meta">
+
+                    <strong>
+                        Taylor Aldridge
+                    </strong>
+
+                    Local Guide · 20.09.2024
+
+                </div>
+
+            </div>
+
+
+
+            <div class="testi-slide">
+
+                <p class="testi-quote">
+
+                    „Ich lasse hier schon
+                    viele Jahre meine Geräte
+                    reparieren. Sehr kompetent,
+                    freundlich und günstig!“
+
+                </p>
+
+
+                <div class="testi-meta">
+
+                    <strong>
+                        Angela Keith
+                    </strong>
+
+                    Local Guide · 08.05.2021
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div
+            class="review-dots"
+            id="reviewDots"
+        ></div>
+
+
     </div>
 
-  </div>
 </section>
 
-<section class="section" id="kontakt">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <div class="section-num">03 — Kontakt</div>
-        <h2 class="section-title">Komm vorbei</h2>
-      </div>
-      <p class="section-desc">Wir sind am Stuttgarter Platz in Berlin, gut erreichbar mit der S-Bahn.</p>
+
+
+<!-- =========================================================
+     KONTAKT
+     ========================================================= -->
+
+<section
+    class="section"
+    id="kontakt"
+>
+
+    <div class="wrap">
+
+
+        <div class="section-head reveal">
+
+            <div>
+
+                <div class="kicker">
+
+                    04 / Kontakt
+
+                </div>
+
+
+                <h2 class="section-title">
+
+                    KOMM VORBEI.
+                    WIR SCHAUEN
+                    ES UNS AN.
+
+                </h2>
+
+            </div>
+
+
+            <p class="section-desc">
+
+                Direkt am Stuttgarter Platz
+                in Berlin-Charlottenburg
+                und gut mit der S-Bahn
+                erreichbar.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="contact-grid">
+
+
+            <div class="contact-card reveal">
+
+
+                <div class="contact-badge">
+
+                    <span class="pulse"></span>
+
+                    Werkstatt in Berlin
+
+                </div>
+
+
+                <h3>
+
+                    HANDY GERMANY
+
+                </h3>
+
+
+                <p class="contact-intro">
+
+                    Smartphone-Reparatur,
+                    Geräte und Zubehör
+                    direkt vor Ort.
+
+                </p>
+
+
+
+                <div class="info-row">
+
+                    <span class="k">
+                        Adresse
+                    </span>
+
+                    <span class="v">
+
+                        Stuttgarter Platz 1a<br>
+                        10627 Berlin
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="info-row">
+
+                    <span class="k">
+                        Telefon
+                    </span>
+
+                    <span class="v">
+
+                        030 — 77900184
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="info-row">
+
+                    <span class="k">
+                        Mo – Sa
+                    </span>
+
+                    <span class="v">
+
+                        10:00 – 18:00 Uhr
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="info-row">
+
+                    <span class="k">
+                        Sonntag
+                    </span>
+
+                    <span class="v">
+
+                        Geschlossen
+
+                    </span>
+
+                </div>
+
+
+
+                <a
+                    href="tel:+493077900184"
+                    class="btn btn-primary call-button"
+                >
+
+                    Jetzt anrufen
+
+                    <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M6.5 4.5l3 3-1.8 2.3a14 14 0 0 0 6.5 6.5l2.3-1.8 3 3-1.5 2.3c-.4.6-1.1.9-1.8.8-7.1-.9-12.9-6.7-13.8-13.8-.1-.7.2-1.4.8-1.8l2.3-1.5z"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- KARTE -->
+
+            <div
+                id="map"
+                class="reveal"
+            ></div>
+
+
+        </div>
+
     </div>
-    <div class="contact-grid">
-      <div>
-        <div class="info-row"><span class="k">Adresse</span><span class="v">Stuttgarter Platz 1a, 10627 Berlin</span></div>
-        <div class="info-row"><span class="k">Telefon</span><span class="v">030 — 77900184</span></div>
-        <div class="info-row"><span class="k">Mo – Sa</span><span class="v">10:00 – 18:00 Uhr</span></div>
-        <div class="info-row"><span class="k">Sonntag</span><span class="v">Geschlossen</span></div>
-      </div>
-      <div id="map"></div>
-    </div>
-  </div>
+
 </section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
 
 <footer>
-  <div class="wrap">
-    <div class="foot-row">
-      <div class="logo"><span class="dot"></span>HANDY GERMANY</div>
-      <div class="foot-links">
-        <a href="#leistungen">Leistungen</a>
-        <a href="#video">Einblick</a>
-        <a href="#kontakt">Kontakt</a>
-        <a href="#">Impressum</a>
-        <a href="#">Datenschutz</a>
-      </div>
+
+    <div class="wrap">
+
+
+        <div class="footer-top">
+
+
+            <a
+                href="#"
+                class="logo"
+            >
+
+                <span class="logo-mark">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <rect
+                            x="7"
+                            y="3"
+                            width="10"
+                            height="18"
+                            rx="2.5"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        />
+
+                        <path
+                            d="M10 6h4M11 18h2"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+
+                <span>
+
+                    Handy
+                    <em>Germany</em>
+
+                </span>
+
+            </a>
+
+
+
+            <div class="footer-links">
+
+                <a href="#leistungen">
+                    Leistungen
+                </a>
+
+                <a href="#werkstatt">
+                    Werkstatt
+                </a>
+
+                <a href="#bewertungen">
+                    Bewertungen
+                </a>
+
+                <a href="#kontakt">
+                    Kontakt
+                </a>
+
+                <a href="#">
+                    Impressum
+                </a>
+
+                <a href="#">
+                    Datenschutz
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="footer-bottom">
+
+            <span>
+
+                © 2026 Handy Germany
+
+            </span>
+
+
+            <span>
+
+                Stuttgarter Platz 1a ·
+                10627 Berlin
+
+            </span>
+
+        </div>
+
+
     </div>
-    <div class="foot-fine">© 2026 Handy Germany, Stuttgarter Platz 1a, 10627 Berlin.</div>
-  </div>
+
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
 <script>
-  // Intersection Observer für Scroll-Animationen
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Slider Logik
-  const slides = document.querySelectorAll('.testi-slide');
-  let currentSlide = 0;
+    /* =====================================================
+       MOBILE NAVIGATION
+       ===================================================== */
 
-  function nextSlide() {
-    const outgoing = slides[currentSlide];
-    outgoing.classList.remove('active');
-    outgoing.classList.add('exit');
+    const menuBtn =
+        document.getElementById(
+            "menuBtn"
+        );
 
-    currentSlide = (currentSlide + 1) % slides.length;
-    const incoming = slides[currentSlide];
-    
-    incoming.classList.remove('exit'); 
-    
-    setTimeout(() => {
-      incoming.classList.add('active');
-    }, 50);
-  }
 
-  setInterval(nextSlide, 7000);
+    const navlinks =
+        document.getElementById(
+            "navlinks"
+        );
 
-  // Exakte Koordinaten für Handy Germany am Stuttgarter Platz 1a, Berlin
-  const map = L.map('map').setView([52.5058, 13.3061], 17); 
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+    menuBtn.addEventListener(
+        "click",
+        () => {
 
-  L.marker([52.5058, 13.3061]).addTo(map)
-    .bindPopup('Handy Germany<br>Stuttgarter Platz 1a, 10627 Berlin');
+            const isOpen =
+                navlinks.classList.toggle(
+                    "open"
+                );
+
+
+            menuBtn.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+    );
+
+
+    document
+        .querySelectorAll(
+            ".navlinks a"
+        )
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    navlinks
+                        .classList
+                        .remove(
+                            "open"
+                        );
+
+
+                    menuBtn.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+            );
+
+        });
+
+
+
+    /* =====================================================
+       SCROLL ANIMATION
+       ===================================================== */
+
+    const observer =
+        new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target
+                                .classList
+                                .add(
+                                    "show"
+                                );
+
+
+                            observer
+                                .unobserve(
+                                    entry.target
+                                );
+
+                        }
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: 0.12
+            }
+
+        );
+
+
+    document
+        .querySelectorAll(
+            ".reveal"
+        )
+        .forEach(
+            element =>
+                observer.observe(
+                    element
+                )
+        );
+
+
+
+    /* =====================================================
+       TESTIMONIAL SLIDER
+       ===================================================== */
+
+    const slides =
+        [
+            ...document.querySelectorAll(
+                ".testi-slide"
+            )
+        ];
+
+
+    const reviewDots =
+        document.getElementById(
+            "reviewDots"
+        );
+
+
+    let currentSlide =
+        0;
+
+
+    let sliderTimer;
+
+
+
+    slides.forEach(
+        (_, index) => {
+
+            const dot =
+                document.createElement(
+                    "button"
+                );
+
+
+            dot.className =
+                "review-dot" +
+                (
+                    index === 0
+                        ? " active"
+                        : ""
+                );
+
+
+            dot.setAttribute(
+                "aria-label",
+                "Bewertung " +
+                (
+                    index + 1
+                )
+            );
+
+
+            dot.addEventListener(
+                "click",
+                () => {
+
+                    showSlide(
+                        index
+                    );
+
+                }
+            );
+
+
+            reviewDots
+                .appendChild(
+                    dot
+                );
+
+        }
+    );
+
+
+
+    const dots =
+        [
+            ...document.querySelectorAll(
+                ".review-dot"
+            )
+        ];
+
+
+
+    function showSlide(index) {
+
+        slides[currentSlide]
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        dots[currentSlide]
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        currentSlide =
+            index;
+
+
+        slides[currentSlide]
+            .classList
+            .add(
+                "active"
+            );
+
+
+        dots[currentSlide]
+            .classList
+            .add(
+                "active"
+            );
+
+
+        clearInterval(
+            sliderTimer
+        );
+
+
+        sliderTimer =
+            setInterval(
+                nextSlide,
+                6500
+            );
+
+    }
+
+
+
+    function nextSlide() {
+
+        slides[currentSlide]
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        dots[currentSlide]
+            .classList
+            .remove(
+                "active"
+            );
+
+
+        currentSlide =
+            (
+                currentSlide + 1
+            )
+            %
+            slides.length;
+
+
+        slides[currentSlide]
+            .classList
+            .add(
+                "active"
+            );
+
+
+        dots[currentSlide]
+            .classList
+            .add(
+                "active"
+            );
+
+    }
+
+
+
+    sliderTimer =
+        setInterval(
+            nextSlide,
+            6500
+        );
+
+
+
+    /* =====================================================
+       KARTE
+       ===================================================== */
+
+    const map =
+        L.map(
+            "map",
+            {
+                scrollWheelZoom:
+                    false,
+
+                zoomControl:
+                    true
+            }
+        )
+        .setView(
+            [
+                52.5058,
+                13.3061
+            ],
+            17
+        );
+
+
+
+    L.tileLayer(
+
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+        {
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+
+        }
+
+    )
+    .addTo(
+        map
+    );
+
+
+
+    L.marker(
+        [
+            52.5058,
+            13.3061
+        ]
+    )
+    .addTo(
+        map
+    )
+    .bindPopup(
+        `
+        <strong>
+            Handy Germany
+        </strong>
+        <br>
+        Stuttgarter Platz 1a
+        <br>
+        10627 Berlin
+        `
+    );
+
 </script>
+
 
 </body>
 </html>
